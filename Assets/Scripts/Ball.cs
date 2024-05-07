@@ -6,7 +6,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     // Properties
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speed = 10f;
     private Rigidbody2D _rigidbody2D;
     private float _sharpestLaunchAngle = 45f;
     private float _height;
@@ -75,5 +75,10 @@ public class Ball : MonoBehaviour
     public void SetDirection(Vector3 dir)
     {
         _rigidbody2D.velocity = dir * _speed;
+    }
+
+    public Vector2 GetVelocity()
+    {
+        return _rigidbody2D.velocity;
     }
 }

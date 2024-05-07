@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager s_instance;
     private int _leftScore;
     private int _rightScore;
+    public GameState GameState;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
             Destroy(s_instance.gameObject);
         }
         s_instance = this;
+        GameState = GameState.Playing;
     }
 
     public void IncrementScore(int player)
@@ -47,4 +49,10 @@ public class GameManager : MonoBehaviour
         _p1ScoreText.text = _leftScore.ToString();
         _p2ScoreText.text = _rightScore.ToString();
     }
+}
+
+public enum GameState
+{
+    Playing,
+    GameOver
 }
