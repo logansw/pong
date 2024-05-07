@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using System;
 
 // Handles game flow and state, and tracks the score
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _p1ScoreText;
-    [SerializeField] private TMP_Text _p2ScoreText;
     public static GameManager s_instance;
     private int _leftScore;
     private int _rightScore;
     public GameState GameState;
+    public static Action e_OnGameStart;
+    [SerializeField] private UIManager _uiManager;
 
     void Awake()
     {
@@ -21,7 +20,7 @@ public class GameManager : MonoBehaviour
             Destroy(s_instance.gameObject);
         }
         s_instance = this;
-        GameState = GameState.Playing;
+        GameState = GameState.PreStart;
     }
 
     public void IncrementScore(int player)
@@ -34,25 +33,28 @@ public class GameManager : MonoBehaviour
         {
             _rightScore++;
         }
-        RenderScores();
+        _uiManager.RenderScores(_leftScore, _rightScore);
     }
 
     public void ResetScores()
     {
         _leftScore = 0;
         _rightScore = 0;
-        RenderScores();
+        _uiManager.RenderScores(_leftScore, _rightScore);
     }
 
-    private void RenderScores()
+    public void StartGame()
     {
-        _p1ScoreText.text = _leftScore.ToString();
-        _p2ScoreText.text = _rightScore.ToString();
+        GameState = GameState.Playing;
+        ResetScores();
+        e_OnGameStart?.Invoke();
+        _uiManager.HidePanels();
     }
 }
 
 public enum GameState
 {
+    PreStart,
     Playing,
     GameOver
 }
