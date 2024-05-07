@@ -34,6 +34,12 @@ public class GameManager : MonoBehaviour
             _rightScore++;
         }
         _uiManager.RenderScores(_leftScore, _rightScore);
+
+        if (_leftScore >= 5 || _rightScore >= 5)
+        {
+            GameState = GameState.GameOver;
+            _uiManager.ShowGameOverPanel(_leftScore > _rightScore ? 1 : 2);
+        }
     }
 
     public void ResetScores()

@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _p2ScoreText;
     [SerializeField] private GameObject _startPanel;
     [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private TMP_Text _winnerText;
 
     public void RenderScores(int leftScore, int rightScore)
     {
@@ -23,8 +24,9 @@ public class UIManager : MonoBehaviour
         _gameOverPanel.SetActive(false);
     }
 
-    public void ShowGameOverPanel()
+    public void ShowGameOverPanel(int winner)
     {
+        _winnerText.text = "Player " + winner + " wins!";
         _startPanel.SetActive(false);
         _gameOverPanel.SetActive(true);
     }

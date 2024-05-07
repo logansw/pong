@@ -17,6 +17,16 @@ public class Ball : MonoBehaviour
         _height = transform.localScale.y;
     }
 
+    void OnEnable()
+    {
+        GameManager.e_OnGameStart += Restart;
+    }
+
+    void OnDisable()
+    {
+        GameManager.e_OnGameStart -= Restart;
+    }
+
     void Start()
     {
         Restart();
@@ -31,6 +41,8 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.s_instance.GameState.Equals(GameState.GameOver)) { return; }
+
         CheckVerticalOutOfBounds();
         CheckHorizontalOutOfBounds();
     }
