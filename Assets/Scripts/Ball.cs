@@ -41,7 +41,7 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.s_instance.GameState.Equals(GameState.GameOver)) { return; }
+        if (GameManager.s_Instance.GameState.Equals(GameState.GameOver)) { return; }
 
         CheckVerticalOutOfBounds();
         CheckHorizontalOutOfBounds();
@@ -52,10 +52,12 @@ public class Ball : MonoBehaviour
         if ((transform.position.y + (_height / 2)) > Camera.main.orthographicSize)
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, -Mathf.Abs(_rigidbody2D.velocity.y));
+            PlayBounceSound();
         }
         else if ((transform.position.y - (_height / 2f)) < -Camera.main.orthographicSize)
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Mathf.Abs(_rigidbody2D.velocity.y));
+            PlayBounceSound();
         }
     }
 
@@ -63,12 +65,12 @@ public class Ball : MonoBehaviour
     {
         if ((transform.position.x + (_height / 2)) > Camera.main.orthographicSize * Camera.main.aspect)
         {
-            GameManager.s_instance.IncrementScore(1);
+            GameManager.s_Instance.IncrementScore(1);
             Restart();
         }
         else if ((transform.position.x - (_height / 2)) < -Camera.main.orthographicSize * Camera.main.aspect)
         {
-            GameManager.s_instance.IncrementScore(2);
+            GameManager.s_Instance.IncrementScore(2);
             Restart();
         }
     }
@@ -92,5 +94,10 @@ public class Ball : MonoBehaviour
     public Vector2 GetVelocity()
     {
         return _rigidbody2D.velocity;
+    }
+
+    private void PlayBounceSound()
+    {
+        AudioManager.s_Instance.LowBeepSmooth.Play();
     }
 }

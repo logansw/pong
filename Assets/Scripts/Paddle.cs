@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(PaddleController))]
@@ -26,6 +27,7 @@ public class Paddle : MonoBehaviour
         Ball ball = other.gameObject.GetComponent<Ball>();
         Vector2 offset = new Vector2(other.transform.position.x - transform.position.x, (other.transform.position.y - transform.position.y) / 2f);
         ball.SetDirection(offset.normalized);
+        AudioManager.s_Instance.LowBeepSmooth.Play();
     }
 
     // Prevents the paddle from moving off screen

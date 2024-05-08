@@ -4,22 +4,17 @@ using UnityEngine;
 using System;
 
 // Handles game flow and state, and tracks the score
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager s_instance;
     private int _leftScore;
     private int _rightScore;
     public GameState GameState;
     public static Action e_OnGameStart;
     [SerializeField] private UIManager _uiManager;
 
-    void Awake()
+    protected override void Awake()
     {
-        if (s_instance != null)
-        {
-            Destroy(s_instance.gameObject);
-        }
-        s_instance = this;
+        base.Awake();
         GameState = GameState.PreStart;
     }
 
@@ -40,6 +35,7 @@ public class GameManager : MonoBehaviour
             GameState = GameState.GameOver;
             _uiManager.ShowGameOverPanel(_leftScore > _rightScore ? 1 : 2);
         }
+        AudioManager.s_Instance.Score.Play();
     }
 
     public void ResetScores()
