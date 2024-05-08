@@ -6,7 +6,9 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     // Properties
-    [SerializeField] private float _speed = 10f;
+    [SerializeField] private float _initialSpeed;
+    [SerializeField] private float _speedIncrease = 1f;
+    private float _speed;
     private Rigidbody2D _rigidbody2D;
     private float _sharpestLaunchAngle = 45f;
     private float _height;
@@ -35,6 +37,7 @@ public class Ball : MonoBehaviour
     // Spawns the ball at the center of the map and sends it in a random direction
     public void Restart()
     {
+        _speed = _initialSpeed;
         transform.position = Vector3.zero;
         _rigidbody2D.velocity = GetRandomStartDirection(_sharpestLaunchAngle) * _speed;
     }
@@ -99,5 +102,10 @@ public class Ball : MonoBehaviour
     private void PlayBounceSound()
     {
         AudioManager.s_Instance.LowBeepSmooth.Play();
+    }
+
+    public void IncreaseSpeed()
+    {
+        _speed += _speedIncrease;
     }
 }

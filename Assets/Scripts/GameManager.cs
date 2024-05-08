@@ -30,10 +30,11 @@ public class GameManager : Singleton<GameManager>
         }
         _uiManager.RenderScores(_leftScore, _rightScore);
 
-        if (_leftScore >= 5 || _rightScore >= 5)
+        if (!GameState.Equals(GameState.PreStart) && _leftScore >= 5 || _rightScore >= 5)
         {
             GameState = GameState.GameOver;
             _uiManager.ShowGameOverPanel(_leftScore > _rightScore ? 1 : 2);
+            AudioManager.s_Instance.HighBeepSmooth.Play();
         }
         AudioManager.s_Instance.Score.Play();
     }
