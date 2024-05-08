@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// Handles game flow and state, and tracks the score
+/// <summary>
+/// Handles game flow and state, and tracks the score.
+/// </summary>
+/// TODO: More time could be spent building out a nicer state machine for the game that
+/// provides a single place to manage the game state and transitions, ensuring that all
+/// necessary changes are made when transitioning between states, in a way that avoids
+/// the unpredictable execution order that happens when multiple functions are triggered
+/// by an event. A little overkill for this project perhaps, but want to recognize the room
+/// for improvmement if working on a larger project.
 public class GameManager : Singleton<GameManager>
 {
+    // Public
+    public static Action e_OnGameStart;
+    public GameState GameState;
+
+    // External References
+    [SerializeField] private UIManager _uiManager;
+
+    // Private
     private int _leftScore;
     private int _rightScore;
-    public GameState GameState;
-    public static Action e_OnGameStart;
-    [SerializeField] private UIManager _uiManager;
 
     protected override void Awake()
     {
@@ -18,6 +31,12 @@ public class GameManager : Singleton<GameManager>
         GameState = GameState.PreStart;
     }
 
+    /// <summary>
+    /// Increments the score of the given player.
+    /// </summary>
+    /// <param name="player">The player's ID. 1 for player 1, and 2 for player 2.</param>
+    /// TODO: What if someone passes in a value other than 1 or 2? How can we restructure to prevent this?
+    /// A bool feels a little unintuitive IMO. Maybe an enum, but it feels kind of funny to have such an enum.
     public void IncrementScore(int player)
     {
         if (player == 1)
@@ -39,6 +58,9 @@ public class GameManager : Singleton<GameManager>
         AudioManager.s_Instance.Score.Play();
     }
 
+    /// <summary>
+    /// Resets scores of both players to 0
+    /// </summary>
     public void ResetScores()
     {
         _leftScore = 0;
@@ -46,6 +68,9 @@ public class GameManager : Singleton<GameManager>
         _uiManager.RenderScores(_leftScore, _rightScore);
     }
 
+    /// <summary>
+    /// Starts the game and resets the scores.
+    /// </summary>
     public void StartGame()
     {
         GameState = GameState.Playing;

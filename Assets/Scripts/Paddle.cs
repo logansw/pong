@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Blob component that handles the paddle's movement and collision. Requires a PaddleController component
+/// to determine what logic the paddle should use to determine how to move (e.g. Player-controlled vs. AI-controlled).
+/// </summary>
 [RequireComponent(typeof(PaddleController))]
 public class Paddle : MonoBehaviour
 {
+    // Properties
     [SerializeField] private float _speed = 5f;
+    // Private
     private PaddleController _paddleController;
     private float _height;
 
@@ -31,7 +37,9 @@ public class Paddle : MonoBehaviour
         AudioManager.s_Instance.LowBeepSmooth.Play();
     }
 
-    // Prevents the paddle from moving off screen
+    /// <summary>
+    /// Prevents the paddle from moving off-screen
+    /// </summary>
     private void ClampPositionToCamera()
     {
         if (transform.position.y + _height / 2 > Camera.main.orthographicSize)

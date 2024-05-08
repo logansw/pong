@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class PaddleManager : MonoBehaviour
+/// <summary>
+/// Handles the creation of paddles based on the number of players.
+/// </summary>
+public class PaddleManager : Singleton<PaddleManager>
 {
+    // Prefabs
     [SerializeField] private PlayerController _player1Prefab;
     [SerializeField] private PlayerController _player2Prefab;
     [SerializeField] private AIController _aiPrefab;
+
+    // Private
     private PaddleController _leftPaddle;
     private PaddleController _rightPaddle;
     private int PlayerCount;
@@ -23,7 +29,10 @@ public class PaddleManager : MonoBehaviour
         GameManager.e_OnGameStart += OnStart;
     }
 
-    public void Restart()
+    /// <summary>
+    /// Destroys old paddles
+    /// </summary>
+    public void CleanUp()
     {
         if (_leftPaddle != null)
         {
@@ -35,9 +44,12 @@ public class PaddleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// To be called when the game starts. Creates and positions new paddles based on the number of players.
+    /// </summary>
     public void OnStart()
     {
-        Restart();
+        CleanUp();
         switch (PlayerCount)
         {
             case 0:
@@ -57,6 +69,12 @@ public class PaddleManager : MonoBehaviour
         _rightPaddle.transform.position = new Vector3(10, 0, 0);
     }
 
+    /// <summary>
+    /// Sets the number of players in the game.
+    /// </summary>
+    /// <param name="count">The number of players</param>
+    /// TODO: Similar to GameManager, what if someone passes in a value other than 0, 1, or 2?
+    /// This method totally allows it, but it's not clear what the expected behavior is.
     public void SetPlayerCount(int count)
     {
         PlayerCount = count;
